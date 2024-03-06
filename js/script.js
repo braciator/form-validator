@@ -6,41 +6,59 @@ const clearBtn = document.querySelector(".clear")
 const sendBtn = document.querySelector(".send")
 const popup = document.querySelector(".popup")
 
-
 const showError = (input, msg) => {
-    const formBox = input.parentElement;
-    const errorMsg = formBox.querySelector('.error-text');
+	const formBox = input.parentElement
+	const errorMsg = formBox.querySelector(".error-text")
 
-    formBox.classList.add('error');
-    errorMsg.textContent = msg;
+	formBox.classList.add("error")
+	errorMsg.textContent = msg
 }
 
 const clearError = input => {
-    const formBox = input.parentElement;
-    formBox.classList.remove('error');
+	const formBox = input.parentElement
+	formBox.classList.remove("error")
 }
 
 const emptyCheck = input => {
-    input.forEach(el => {
-        if(el.value === '') {
-            showError(el, el.placeholder)
-        } else {
-            clearError(el);
-        }
-    })
+	input.forEach(el => {
+		if (el.value === "") {
+			showError(el, el.placeholder)
+		} else {
+			clearError(el)
+		}
+	})
 }
 
+const checkLength = (input, min) => {
+	if (input.value.length < min) {
+		showError(
+			input,
+			`${input.previousElementSibling.innerText.slice(
+				0,
+				-1
+			)} musi składać się min. z ${min} znaków!`
+		)
+	}
+}
 
+const passCheck = (password, password2) => {
+	if (password.value !== password2.value) {
+		showError(password2, "Podane hasła muszą być jednakowe!")
+	}
+}
 
-sendBtn.addEventListener('click', e => {
-	e.preventDefault();
+sendBtn.addEventListener("click", e => {
+	e.preventDefault()
 
 	emptyCheck([username, password, password2, email])
+	checkLength(username, 3)
+	checkLength(password, 8)
+	passCheck(password, password2)
 })
 
 clearBtn.addEventListener("click", e => {
-	e.preventDefault();
-	[username, password, password2, email].forEach(el => {
-		el.value = "";
+	e.preventDefault()
+	;[username, password, password2, email].forEach(el => {
+		el.value = ""
 	})
 })
